@@ -154,8 +154,8 @@ fi
 : ${ARCH:=""}
 : ${EXTRA_PKGS:=""}
 : ${COMPONENTS:=""}
-: ${CUSTOMIZE_DIR:="@sysconfdir@/ganeti/instance-debootstrap/hooks"}
-: ${VARIANTS_DIR:="@sysconfdir@/ganeti/instance-debootstrap/variants"}
+: ${CUSTOMIZE_DIR:="@sysconfdir@/ganeti/instance-debian/hooks"}
+: ${VARIANTS_DIR:="@sysconfdir@/ganeti/instance-debian/variants"}
 : ${GENERATE_CACHE:="yes"}
 : ${CLEAN_CACHE:="14"} # number of days to keep a cache file
 : ${PARTITION_ALIGNMENT:=2048} # sectors to align partition (1Mib default)

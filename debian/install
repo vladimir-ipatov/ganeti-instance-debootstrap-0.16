@@ -1,0 +1,9 @@
+debian/hooks/* etc/ganeti/instance-debian/hooks/
+debian/variants/* etc/ganeti/instance-debian/variants/
+debian/instance-ubuntu etc/ganeti/
+debian/instance-centos etc/ganeti/
+debian/ubuntu usr/share/ganeti/os/
+debian/centos usr/share/ganeti/os/
+debian/windows usr/share/ganeti/os/
+debian/solaris usr/share/ganeti/os/
+debian/base.repo etc/yum/repos.d

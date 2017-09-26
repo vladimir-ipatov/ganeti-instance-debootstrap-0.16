@@ -1,0 +1,42 @@
+#!/bin/sh
+
+set -e
+
+# Make sure we're not working on the root directory
+if [ -z "$TARGET" -o "$TARGET" = "/" ]; then
+    echo "Invalid target directory '$TARGET', aborting." 1>&2
+    exit 1
+fi
+
+if [ "$(mountpoint -d /)" = "$(mountpoint -d "$TARGET")" ]; then
+    echo "The target directory seems to be the root dir, aborting."  1>&2
+    exit 1
+fi
+
+
+# Fix the console information for xen-pvm mode
+if [ "$HYPERVISOR" = "xen-pvm" ]; then
+    echo "xen-pvm hypervisor detected, preparing for grub"
+    KERNEL_VERSION=`ls -l "$TARGET"/boot/vmlinuz*|sed 's/.*vmlinuz-//'`
+   # chroot "$TARGET" "ls"
+    chroot "$TARGET" ln -s /boot/vmlinuz-$KERNEL_VERSION /vmlinuz
+    chroot "$TARGET" ln -s /boot/initramfs-$KERNEL_VERSION.img /initrd.img
+    cat <<EOF >"$TARGET/boot/grub/menu.lst"
+default         0
+timeout         5
+color cyan/blue white/blue
+
+title           CentOS, default kernel
+root            (hd0,0)
+kernel          /vmlinuz root=/dev/xvda1 ro
+initrd          /initrd.img
+
+title           CentOS, default kernel (single-user mode)
+root            (hd0,0)
+kernel          /vmlinuz root=/dev/xvda1 ro single
+initrd          /initrd.img
+EOF
+
+fi
+
+exit 0

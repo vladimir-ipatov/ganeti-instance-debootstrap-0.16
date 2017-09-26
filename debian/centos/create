@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# Copyright (C) 2007, 2008, 2009, 2012 Google Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+
+set -e
+
+. common.sh
+
+if [ "$GENERATE_CACHE" = "yes" -a ! -d "$CACHE_DIR" ]; then
+  mkdir -p "$CACHE_DIR"
+fi
+
+DPKG_ARCH=${ARCH:-`dpkg --print-architecture`}
+CACHE_FILE="$CACHE_DIR/cache-${SUITE}-${DPKG_ARCH}.tar"
+
+# If the target device is not a real block device we'll first losetup it.
+# This is needed for file disks.
+if [ ! -b $blockdev ]; then
+  ORIGINAL_BLOCKDEV=$blockdev
+  blockdev=$(losetup -sf $blockdev)
+  CLEANUP+=("losetup -d $blockdev")
+fi
+
+if [ "$PARTITION_STYLE" = "none" ]; then
+  filesystem_dev=$blockdev
+elif [ "$PARTITION_STYLE" = "msdos" ]; then
+  # Create one big partition, and make it bootable
+  format_disk0 $blockdev
+  filesystem_dev=$(map_disk0 $blockdev)
+  CLEANUP+=("unmap_disk0 $blockdev")
+else
+  echo "Unknown partition style $PARTITION_STYLE"
+  exit 1
+fi
+
+mkfs.ext4 -Fjq $filesystem_dev
+root_uuid=$($VOL_ID $filesystem_dev )
+
+if [ -n "$swapdev" ]; then
+  mkswap $swapdev
+  swap_uuid=$($VOL_ID $swapdev || true )
+fi
+
+TMPDIR=`mktemp -d` || exit 1
+CLEANUP+=("rmdir $TMPDIR")
+
+mount $filesystem_dev $TMPDIR
+CLEANUP+=("umount $TMPDIR")
+
+# remove the cache file if it's old (> 2 weeks) and writable by the owner (the
+# default due to the standard umask)
+if [ "$CLEAN_CACHE" -a -d "$CACHE_DIR" ]; then
+  find "$CACHE_DIR" -name 'cache-*.tar' -type f \
+    -daystart -mtime "+${CLEAN_CACHE}" -print0 | \
+    xargs -r0 rm -f
+fi
+
+if [ -f "$CACHE_FILE" ]; then
+  tar xf "$CACHE_FILE" -C $TMPDIR
+else
+  if [ "$PROXY" ]; then
+    export http_proxy="$PROXY"
+    export https_proxy="$PROXY"
+  fi
+  # INCLUDE will be empty if EXTRA_PKGS is null/empty, otherwise we
+  # build the full parameter format from it
+#  INCLUDE=${EXTRA_PKGS:+"--include=$EXTRA_PKGS"}
+ # debootstrap \
+  #  ${EXTRA_ARGS} \
+   # --arch "$DPKG_ARCH" \
+    #$INCLUDE \
+    #"$SUITE" $TMPDIR $MIRROR
+	 set +e
+     yum -y --installroot $TMPDIR groupinstall "Base"
+     yum -y --nogpgcheck --installroot $TMPDIR install kernel
+     yum -y --nogpgcheck --installroot $TMPDIR install openssh-server
+     yum -y --nogpgcheck --installroot $TMPDIR install redhat-lsb-core
+     chroot $TMPDIR db_dump /.rpmdb/Packages |chroot $TMPDIR db_load /var/lib/rpm/Packages
+     chroot $TMPDIR rpm --rebuilddb
+     chroot $TMPDIR rm -rf /.rpmdb
+     #remove package cache inside an instance
+     rm -rf $TMPDIR/var/cache/yum/*/packages/*.rpm
+
+  if [ "$GENERATE_CACHE" = "yes" ]; then
+    TMP_CACHE=`mktemp "${CACHE_FILE}.XXXXXX"`
+    tar cf "$TMP_CACHE" -C $TMPDIR .
+    mv -f "$TMP_CACHE" "$CACHE_FILE"
+  fi
+fi
+
+cp -p /etc/hosts $TMPDIR/etc/hosts
+cp -p /etc/resolv.conf $TMPDIR/etc/resolv.conf
+echo $instance > $TMPDIR/etc/hostname
+echo $instance > $TMPDIR/etc/mailname
+
+cat > $TMPDIR/etc/fstab <<EOF
+# /etc/fstab: static file system information.
+#
+# <file system>   <mount point>   <type>  <options>       <dump>  <pass>
+UUID=$root_uuid   /               ext4    defaults        0       1
+proc              /proc           proc    defaults        0       0
+EOF
+
+[ -n "$swapdev" -a -n "$swap_uuid" ] && cat >> $TMPDIR/etc/fstab <<EOF
+UUID=$swap_uuid   swap            swap    defaults        0       0
+EOF
+
+cat > $TMPDIR/etc/sysconfig/network-scripts/ifcfg-lo <<EOF
+DEVICE=lo
+IPADDR=127.0.0.1
+NETMASK=255.0.0.0
+NETWORK=127.0.0.0
+# If you're having problems with gated making 127.0.0.0/8 a martian,
+# you can change this to something else (255.255.255.255, for example)
+BROADCAST=127.255.255.255
+ONBOOT=yes
+NAME=loopback
+EOF
+
+RUN_PARTS=`which run-parts`
+
+if [ -n "$RUN_PARTS" -a -n "$CUSTOMIZE_DIR" -a -d "$CUSTOMIZE_DIR" ]; then
+  TARGET=$TMPDIR
+  BLOCKDEV=$blockdev
+  FSYSDEV=$filesystem_dev
+  export TARGET SUITE ARCH PARTITION_STYLE EXTRA_PKGS BLOCKDEV FSYSDEV
+  $RUN_PARTS $CUSTOMIZE_DIR
+fi
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0

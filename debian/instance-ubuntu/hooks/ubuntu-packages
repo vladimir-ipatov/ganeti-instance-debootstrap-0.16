@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Install packages
+#
+# Do not include packages in EXTRA_PKGS because it will cause error of debootstrap.
+
+set -e
+
+. common.sh
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+CLEANUP=( )
+
+trap cleanup EXIT
+
+set -x
+
+LANG=C
+
+echo Add universe to sources.list
+sed -i 's/main$/main universe/' $TARGET/etc/apt/sources.list
+
+echo Updating package sources
+chroot "$TARGET" apt-get update
+
+echo Installing packages
+chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0
+

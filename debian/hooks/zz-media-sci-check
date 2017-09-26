@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+# if domu suite to match dom0 suite, exit
+if [ "$SUITE" != `lsb_release -c|awk '{print $2}'` ]; then
+    exit 0;
+fi
+
+# Make sure we're not working on the root directory
+if [ -z "$TARGET" -o "$TARGET" = "/" ]; then
+    echo "Invalid target directory '$TARGET', aborting." 1>&2
+    exit 1
+fi
+
+source /etc/default/ganeti-instance-debootstrap
+
+# if debootstrap works from remote repo, exit
+if [ "$MIRROR" != "file:/media/sci/" ]; then
+    exit 0;
+fi
+
+if [ "$(mountpoint -d /)" = "$(mountpoint -d "$TARGET")" ]; then
+    echo "The target directory seems to be the root dir, aborting."  1>&2
+    exit 1
+fi
+
+if [ "$HYPERVISOR" = "xen-pvm" ]; then
+    # check /media/sci existance
+    if ! [ -d /media/sci/pool/main ]; then
+        echo "WARNING! Can't find apt repo in /media/sci. Can't create valid instance without it!"
+        exit 1
+    fi
+fi
+
+exit 0

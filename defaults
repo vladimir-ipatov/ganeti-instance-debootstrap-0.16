@@ -52,7 +52,7 @@
 # CUSTOMIZE_DIR: a directory containing scripts to customize the installation.
 # The scripts are executed using run-parts
 # By default /etc/ganeti/instance-debootstrap/hooks
-# CUSTOMIZE_DIR="/etc/ganeti/instance-debootstrap/hooks"
+CUSTOMIZE_DIR="/etc/ganeti/instance-debian/hooks"
 
 # GENERATE_CACHE: if set to yes (the default), create new cache files;
 # any other value will disable the generation of cache files (but they
@@ -80,3 +80,40 @@ CLEAN_CACHE="14"
 # SSDs), feel free to increase it if your media has even bigger
 # allocation blocks
 # PARTITION_ALIGNMENT=2048
+
+if [ "$OS_NAME" = "ubootstrap" -o "$OS_NAME" = "ubuntu" ]; then
+  CUSTOMIZE_DIR=/etc/ganeti/instance-ubuntu/hooks
+  VARIANTS_DIR=/etc/ganeti/instance-ubuntu/variants
+  MIRROR=http://us.archive.ubuntu.com/ubuntu/
+  if [ "$OS_VARIANT" = "precise" ]; then
+    SUITE=precise
+  elif [ "$OS_VARIANT" = "trusty" ]; then
+    SUITE=trusty
+  elif [ "$OS_VARIANT" = "xenial" ]; then
+    SUITE=xenial
+  else
+    SUITE=xenial
+  fi
+  EXTRA_PKGS="linux-image-virtual"
+elif [ "$OS_NAME" = "debootstrap" -o "$OS_NAME" = "debian" ]; then
+  ARCH=amd64
+  EXTRA_PKGS="linux-image-amd64"
+  if [ "$OS_VARIANT" = "squeeze" ]; then
+    MIRROR=http://archive.debian.org/debian/
+    SUITE=squeeze
+    EXTRA_PKGS="linux-image-xen-amd64"
+  elif [ "$OS_VARIANT" = "jessie" ]; then
+    MIRROR=http://ftp.debian.org/debian/
+    SUITE=jessie
+  elif [ "$OS_VARIANT" = "stretch" ]; then
+    MIRROR=http://ftp.debian.org/debian/
+    SUITE=stretch
+  elif [ "$OS_VARIANT" = "wheezy" ]; then
+    MIRROR=http://ftp.debian.org/debian/
+    SUITE=wheezy
+  else
+    MIRROR=file:/media/sci/
+    SUITE=stretch
+    EXTRA_ARGS="--no-check-gpg"
+  fi
+fi

@@ -1,7 +1,7 @@
-osname=$(subst ganeti-instance-,,$(PACKAGE))
+osname=debian
 
 osdir=$(OS_DIR)/$(osname)
-variantsdir=$(DESTDIR)$(sysconfdir)/ganeti/instance-debootstrap/variants
+variantsdir=$(DESTDIR)$(sysconfdir)/ganeti/instance-debian/variants
 defaultsdir=$(DESTDIR)$(sysconfdir)/default
 
 dist_os_SCRIPTS = create import export rename verify

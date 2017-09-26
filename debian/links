@@ -1,1 +1,9 @@
-etc/ganeti/instance-debootstrap/variants.list usr/share/ganeti/os/debootstrap/variants.list
+etc/ganeti/instance-debian/variants.list usr/share/ganeti/os/debian/variants.list
+etc/ganeti/instance-ubuntu/variants.list usr/share/ganeti/os/ubuntu/variants.list
+/usr/share/ganeti/os/debian /usr/share/ganeti/os/debootstrap
+/usr/share/ganeti/os/ubuntu /usr/share/ganeti/os/ubootstrap
+/usr/share/ganeti/os/centos /usr/share/ganeti/os/yumbootstrap
+/etc/ganeti/instance-debian /etc/ganeti/instance-debootstrap
+/etc/ganeti/instance-ubuntu /etc/ganeti/instance-ubootstrap
+/etc/ganeti/instance-centos /etc/ganeti/instance-yumbootstrap
+

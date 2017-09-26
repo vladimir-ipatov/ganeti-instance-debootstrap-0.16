@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# Enable puppet for 12.04 and 14.04 installs
+
+set -e
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+if [ "$OS_VARIANT" = "jessie" -o "$OS_VARIANT" = "stretch" ]; then
+        echo Enabling puppet agent
+        chroot "$TARGET" /usr/bin/puppet agent --enable
+        echo Killing puppet agent
+        set +e
+        chroot "$TARGET" /bin/kill -9 `cat $TARGET/run/puppet/agent.pid`
+fi
+
+exit 0

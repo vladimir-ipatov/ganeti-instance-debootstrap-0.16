@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# removing systemd
+
+set -e
+set -x
+
+. common.sh
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+test "$OS_VARIANT" = "jessie" -o "$OS_VARIANT" = "stretch"||exit 0
+
+echo removing systemd
+
+chroot "$TARGET" apt-get install -y --force-yes sysvinit-core sysvinit-utils
+cp "$TARGET/usr/share/sysvinit/inittab" "$TARGET/etc/inittab"
+chroot "$TARGET" apt-get remove -y --force-yes --purge --auto-remove systemd
+echo -e 'Package: systemd\nPin: release *\nPin-Priority: -1' > "$TARGET/etc/apt/preferences.d/systemd"
+echo -e '\n\nPackage: *systemd*\nPin: release *\nPin-Priority: -1' >> "$TARGET/etc/apt/preferences.d/systemd"
+echo -e '\nPackage: systemd:i386\nPin: release *\nPin-Priority: -1' >> "$TARGET/etc/apt/preferences.d/systemd"
+

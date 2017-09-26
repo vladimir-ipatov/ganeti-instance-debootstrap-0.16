@@ -24,8 +24,8 @@ debian/autoreconf.before
 debian/debhelper-build-stamp
 test-suite.log
 test
-.pc
 aclocal.m4
 autom4te.cache
 autotools
 debian/patches
+.pc

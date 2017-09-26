@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Enable puppet for 12.04 and 14.04, 16.04 installs
+
+set -e
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+if [ "$OS_VARIANT" = "precise" ]; then
+
+        # enable puppet autostart
+        cat <<EOF >"$TARGET/etc/default/puppet"
+# Defaults for puppet - sourced by /etc/init.d/puppet
+
+# Start puppet on boot?
+START=yes
+
+# Startup options
+DAEMON_OPTS=""
+EOF
+
+        ## Allow plugins and facts syncing for puppet
+        sed -i '/\[main\]/ a\pluginsync = true' $TARGET/etc/puppet/puppet.conf
+else
+        echo Enabling puppet agent
+        chroot "$TARGET" /usr/bin/puppet agent --enable
+        set +e
+        chroot "$TARGET" /bin/kill -9 `cat $TARGET/run/puppet/agent.pid`
+fi
+
+exit 0

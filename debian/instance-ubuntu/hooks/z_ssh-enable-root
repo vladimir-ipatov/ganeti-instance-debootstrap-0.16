@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Enable root ssh access with password for 14.04 and 16.04 installs
+
+set -e
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+test "$OS_VARIANT" = "precise" && exit 0
+sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' $TARGET/etc/ssh/sshd_config
+sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' $TARGET/etc/ssh/sshd_config
+
+exit 0
+
