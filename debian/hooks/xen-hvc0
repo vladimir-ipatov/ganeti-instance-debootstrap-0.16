@@ -1,6 +1,5 @@
 #!/bin/sh
-
-set -e
+echo "Starting hook xen-hvc0: set proper console device"
 
 # Make sure we're not working on the root directory
 if [ -z "$TARGET" -o "$TARGET" = "/" ]; then
@@ -21,4 +20,5 @@ hvc0:2345:respawn:/sbin/getty 38400 hvc0
 EOF
 fi
 
+echo "Finishing hook xen-hvc0"
 exit 0

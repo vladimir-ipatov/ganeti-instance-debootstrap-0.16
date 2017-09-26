@@ -1,8 +1,7 @@
 #!/bin/bash
 #
 # Configuring puppetmaster
-
-set -e
+echo "Starting hook 02-puppetmaster: add puppet master for sci"
 
 . common.sh
 
@@ -67,3 +66,5 @@ cp -r /usr/local/simple-cdd/SCI-amd64.files/files/root/puppet "$TARGET/root"
  cd ..
  rm -rf tmp
 )
+
+echo "Finishing hook 02-puppetmaster"

@@ -25,6 +25,7 @@
 # "NETWORK NETMASK BROADCAST GATEWAY"
 # And to place a /usr/local/sbin/gnt-ip2net script which will translate the
 # IP addresses of your networks to form NETWORK/NUM
+echo "Starting hook interfaces: set network config"
 
 #TARGET=/tmp/test
 #NIC_COUNT=1
@@ -126,3 +127,5 @@ EOF
   done
 
 fi
+
+echo "Finishing hook interfaces"

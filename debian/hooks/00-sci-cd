@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+echo "Starting hook 00-sci-cd: copy local packages to instances"
 
 # if sci-cd is absent or empty, exit
 if !(ls -A /media/sci) then
@@ -48,4 +48,5 @@ cat <<EOF >"$TARGET/etc/apt/apt.conf.d/00trustcdrom"
 APT::Authentication::TrustCDROM "true";
 EOF
 
+echo "Finishing hook 00-sci-cd"
 exit 0

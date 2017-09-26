@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+echo "Starting hook zz-check-media: checking something :)"
+set -x
 
 # if domu suite to match dom0 suite, exit
 if [ "$SUITE" != `lsb_release -c|awk '{print $2}'` ]; then
@@ -33,4 +34,5 @@ if [ "$HYPERVISOR" = "xen-pvm" ]; then
     fi
 fi
 
+echo "Finishing hook zz-check-media"
 exit 0

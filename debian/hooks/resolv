@@ -1,14 +1,6 @@
 #!/bin/bash
 #
-# Set up hosts and resolv.conf for LAN
-
-set -e
-
-if [[ "$OS_VARIANT" == "sci" ]]; then
-	grep ^search /etc/resolv.conf >"$TARGET/etc/resolv.conf"
-	echo "nameserver 127.0.0.1" >>"$TARGET/etc/resolv.conf"
-	exit 0
-fi
+echo "Starting hook resolv: Set up hosts and resolv.conf for LAN"
 
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
@@ -16,6 +8,12 @@ if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
 fi
 
 echo Setting up hosts and hostname
+
+if [[ "$OS_VARIANT" == "sci" ]]; then
+	grep ^search /etc/resolv.conf >"$TARGET/etc/resolv.conf"
+	echo "nameserver 127.0.0.1" >>"$TARGET/etc/resolv.conf"
+	exit 0
+fi
 
 hostname=`echo $INSTANCE_NAME|cut -d. -f1`
 # set fqnd from resolv conf if INSTANCE_NAME don't contain it.
@@ -51,4 +49,5 @@ grep ^search /etc/resolv.conf >"$TARGET/etc/resolv.conf"
 echo "nameserver $SCI_LAN_IP" >>"$TARGET/etc/resolv.conf"
 
 
+echo "Finishing hook resolv"
 exit 0

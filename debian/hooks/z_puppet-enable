@@ -1,20 +1,19 @@
 #!/bin/bash
 #
-# Enable puppet for 12.04 and 14.04 installs
-
-set -e
+echo "Starting hook z_puppet-enable: Enable puppet for modern debians"
 
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
   exit 1
 fi
 
-if [ "$OS_VARIANT" = "jessie" -o "$OS_VARIANT" = "stretch" ]; then
-        echo Enabling puppet agent
-        chroot "$TARGET" /usr/bin/puppet agent --enable
-        echo Killing puppet agent
-        set +e
-        chroot "$TARGET" /bin/kill -9 `cat $TARGET/run/puppet/agent.pid`
-fi
+test "$OS_VARIANT" = "wheezy" -o "$OS_VARIANT" = "squeeze" && exit 0
 
+echo Enabling puppet agent
+chroot "$TARGET" /usr/bin/puppet agent --enable
+echo Killing puppet agent
+chroot "$TARGET" /bin/kill -9 `cat $TARGET/run/puppet/agent.pid`
+
+echo "Finishing hook z_puppet-enable"
 exit 0
+

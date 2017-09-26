@@ -1,6 +1,5 @@
 #!/bin/sh
-
-set -e
+echo "Starting hook grub: setting config for pygrub"
 
 # Make sure we're not working on the root directory
 if [ -z "$TARGET" -o "$TARGET" = "/" ]; then
@@ -35,4 +34,5 @@ EOF
 
 fi
 
+echo "Finishing hook grub"
 exit 0

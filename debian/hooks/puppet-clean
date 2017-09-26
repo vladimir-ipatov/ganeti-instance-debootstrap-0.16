@@ -1,8 +1,6 @@
 #!/bin/bash
 #
-# Copy sci.conf for puppet reference
-
-set -e
+echo "Starting hook puppet-clean: set cleaning puppet reports in cron"
 
 test "$OS_VARIANT" = "sci" || exit 0
 
@@ -14,4 +12,5 @@ fi
 echo Set puppet reports cleaning
 echo "13 3    * * *   root    find /var/lib/puppet/reports -type f -ctime +30|xargs rm -fr" >> $TARGET/etc/cron.d/clean-puppet-reports
 
+echo "Finishing hook puppet-clean"
 exit 0

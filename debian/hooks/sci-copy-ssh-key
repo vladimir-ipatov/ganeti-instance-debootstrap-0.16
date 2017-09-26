@@ -1,8 +1,6 @@
 #!/bin/bash
 #
-# Copy root ssh authorized keys to sci
-
-set -e
+echo "Starting hook sci-copy-ssh-keys: Copy root ssh authorized keys to sci"
 
 test "$OS_VARIANT" = "sci" || exit 0
 
@@ -16,4 +14,5 @@ mkdir -p "$TARGET/root/.ssh"
 chmod 700 "$TARGET/root/.ssh"
 cp /root/.ssh/authorized_keys "$TARGET/root/.ssh"
 
+echo "Finishing hook sci-copy-ssh-keys"
 exit 0

@@ -1,8 +1,7 @@
 #!/bin/bash
 #
 # Configuring puppet
-
-set -e
+echo "Starting hook 02-puppet: add puppet agent"
 
 . common.sh
 
@@ -22,5 +21,9 @@ START=yes
 DAEMON_OPTS=""
 EOF
 
+test "$OS_VARIANT" = "wheezy" -o "$OS_VARIANT" = "squeeze" || exit 0
+
 ## Allow plugins and facts syncing for puppet
 sed -i '/\[main\]/ a\pluginsync = true' $TARGET/etc/puppet/puppet.conf
+
+echo "Finishing hook 02-puppet"

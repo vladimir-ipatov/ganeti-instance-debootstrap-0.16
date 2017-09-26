@@ -3,8 +3,8 @@
 # Install packages
 #
 # Do not include packages in EXTRA_PKGS because it will cause error of debootstrap.
+echo "Starting hook 01-packages: install additional packages"
 
-set -e
 
 . common.sh
 
@@ -30,9 +30,7 @@ echo Updating package sources
 chroot "$TARGET" apt-get update
 
 echo Installing packages
-chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client
-chroot "$TARGET" apt-get -y --force-yes install puppet openssh-server
-chroot "$TARGET" apt-get -y --force-yes install puppet lsb-release
+chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server lsb-release
 
 if [ "$OS_VARIANT" = "sci" ]; then
  echo Installing packages for SCI
@@ -44,6 +42,7 @@ if [ "$OS_VARIANT" = "sci" ]; then
  rm "$TARGET/etc/default/openbsd-inetd"
 fi
 
+echo "Finishing hook 01-packages"
 # execute cleanups
 cleanup
 trap - EXIT

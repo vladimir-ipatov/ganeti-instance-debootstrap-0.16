@@ -1,8 +1,6 @@
 #!/bin/sh
 #
-# Set up hosts and resolv.conf for LAN
-
-set -e
+echo "Starting hook dhclient: set send-hostname for debian-squeeze"
 
 test "$OS_VARIANT" != "squeeze" && exit 0
 
@@ -14,4 +12,5 @@ fi
 echo Setting dhclient send-hostname
 sed -i "s/#send host-name.*/send host-name \"$(echo $INSTANCE_NAME|cut -d. -f1)\"\;/" $TARGET/etc/dhcp/dhclient.conf
 
+echo "Finishing hook dhclient"
 exit 0

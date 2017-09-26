@@ -1,9 +1,7 @@
 #!/bin/bash
 #
 # removing systemd
-
-set -e
-set -x
+echo "Starting hook 01-systemd: removing systemd"
 
 . common.sh
 
@@ -12,14 +10,34 @@ if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   exit 1
 fi
 
-test "$OS_VARIANT" = "jessie" -o "$OS_VARIANT" = "stretch"||exit 0
+test "$OS_VARIANT" = "wheezy" -o "$OS_VARIANT" = "squeeze" && exit 0
 
 echo removing systemd
 
+CLEANUP=( )
+
+trap cleanup EXIT
+
+set -e
+
+if [ -e $TARGET/media/cdrom ]; then
+	mount -o bind /media/sci $TARGET/media/cdrom
+	CLEANUP+=("umount $TARGET/media/cdrom")
+fi
+
+LANG=C
+
+chroot "$TARGET" apt-get update
 chroot "$TARGET" apt-get install -y --force-yes sysvinit-core sysvinit-utils
 cp "$TARGET/usr/share/sysvinit/inittab" "$TARGET/etc/inittab"
 chroot "$TARGET" apt-get remove -y --force-yes --purge --auto-remove systemd
 echo -e 'Package: systemd\nPin: release *\nPin-Priority: -1' > "$TARGET/etc/apt/preferences.d/systemd"
 echo -e '\n\nPackage: *systemd*\nPin: release *\nPin-Priority: -1' >> "$TARGET/etc/apt/preferences.d/systemd"
 echo -e '\nPackage: systemd:i386\nPin: release *\nPin-Priority: -1' >> "$TARGET/etc/apt/preferences.d/systemd"
+
+echo "Finishing hook 01-systemd"
+# execute cleanups
+cleanup
+trap - EXIT
+exit 0
 
