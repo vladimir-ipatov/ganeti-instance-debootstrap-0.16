@@ -1,0 +1,5 @@
+Test-Command: ./test/install-export-import
+# Use isolation-machine, as we need access to /dev/loop* which are not
+# present in containers.
+Restrictions: needs-root, isolation-machine
+Depends: ganeti-instance-debootstrap

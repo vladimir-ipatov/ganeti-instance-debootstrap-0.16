@@ -1,0 +1,4 @@
+version=3
+
+opts=pgpsigurlmangle=s/$/.sig/ \
+http://downloads.ganeti.org/instance-debootstrap/ ganeti-instance-debootstrap-(\d+\.\d+[\d.]*)\.tar\.gz

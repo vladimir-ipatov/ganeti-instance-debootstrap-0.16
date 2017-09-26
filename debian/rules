@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+
+INSTDIR=$(CURDIR)/debian/ganeti-instance-debootstrap
+
+%:
+	dh $@ --with=autoreconf
+
+
+override_dh_auto_install:
+	dh_auto_install
+	cp defaults $(CURDIR)/debian/ganeti-instance-debootstrap.default
+	# Remove the extra copyright file
+	rm $(INSTDIR)/usr/share/doc/ganeti-instance-debootstrap/COPYING
+	mv $(INSTDIR)/usr/share/ganeti/os/debootstrap/variants.list \
+	  $(INSTDIR)/etc/ganeti/instance-debootstrap/variants.list
+
+override_dh_auto_clean:
+	dh_auto_clean 
+	rm -f $(CURDIR)/debian/ganeti-instance-debootstrap.default
+
+.PHONY: override_dh_auto_install override_dh_auto_clean

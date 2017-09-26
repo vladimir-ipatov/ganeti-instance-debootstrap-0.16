@@ -1,0 +1,2 @@
+rm_conffile /etc/ganeti/instance-debootstrap/hooks/xen-hvc0 0.14-1~
+rm_conffile /etc/ganeti/instance-debootstrap/hooks/clear-root-password 0.14-1~

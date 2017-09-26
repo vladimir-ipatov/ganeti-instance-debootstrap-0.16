@@ -1,0 +1,4 @@
+usr/share/ganeti/os/debootstrap
+var/cache/ganeti-instance-debootstrap
+etc/default
+etc/ganeti/instance-debootstrap/hooks

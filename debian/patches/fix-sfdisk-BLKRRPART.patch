@@ -1,0 +1,27 @@
+Author: Apollon Oikonomopoulos <apoikos@debian.org>
+Description: Skip newer sfdisk's check using the BLKRRPART ioctl
+ Newer sfdisk versions (>= 2.26) issue a BLKRRPART ioctl to check if a device
+ is in use prior to partitioning it. However, the BLKRRPART ioctl may fail for
+ a number of other reasons, including when a device is allocated as
+ non-partitionable using alloc_disk(1). Since DRBD and LVM devices are
+ allocated as non-partionable, sfdisk will always think they're busy and fail.
+ .
+ Since we're dealing with DRBD and LVM devices mostly, we need to work our way
+ around this and pass `--no-reread` if sfdisk supports it.
+Forwarded: no
+Last-Update: 2017-05-03
+Bug-Debian: https://bugs.debian.org/853167
+--- ganeti-instance-debootstrap-0.16.orig/common.sh.in
++++ ganeti-instance-debootstrap-0.16/common.sh.in
+@@ -94,6 +94,11 @@ format_disk0() {
+   if sfdisk --help | grep -q -e '--cylinders'; then
+     ARGS="-H 64 -S 32 -u S --Linux"
+   fi
++  # Some versions of sfdisk need to be told to skip checking using ioctl(dev,
++  # BLKRRPART), as this always fails for DRBD and LVM devices.
++  if sfdisk --help | fgrep -q -- '--no-reread'; then
++    ARGS="--no-reread $ARGS"
++  fi
+   sfdisk $ARGS --quiet "$1" <<EOF
+ ${PARTITION_ALIGNMENT},,L,*
+ EOF

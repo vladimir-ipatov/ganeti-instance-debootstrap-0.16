@@ -1,0 +1,9 @@
+ganeti-instance-debootstrap (0.9-1) unstable; urgency=low
+
+  The hooks directory has been moved from /etc/ganeti/instance-debootstrap.d to
+  /etc/ganeti/instance-debootstrap.hooks, to have a single directory for
+  customization. This requires moving of any existing hooks to the new
+  directory.
+
+ -- Iustin Pop <iustin@debian.org>  Sun, 18 Apr 2010 13:34:54 +0200
+

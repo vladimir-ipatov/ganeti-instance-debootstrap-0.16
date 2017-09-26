@@ -1,0 +1,154 @@
+ganeti-instance-debootstrap (0.16-2.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix "illegal option for fgrep" error by using "--" to escape the search
+    needle. (Closes: #864025)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 06 Jun 2017 17:00:39 +0100
+
+ganeti-instance-debootstrap (0.16-2) unstable; urgency=medium
+
+  * Skip newer sfdisk's check using the BLKRRPART ioctl (Closes: #853167).
+    This check will always fail with non-partitionable devices, such as DRBD
+    and LVM, completely breaking disk partitioning. Thanks to Martin Weinelt
+    <hexa@darmstadt.ccc.de> for testing and feedback!
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Wed, 03 May 2017 16:44:54 +0300
+
+ganeti-instance-debootstrap (0.16-1) unstable; urgency=medium
+
+  * New upstream release:
+    + Fix compatibility with sfdisk >= 2.26 (LP: #1577346)
+  * Run upstream's install-export-import test as a DEP-8 test. Note that we
+    require isolation-machine for the test to work, as it needs access to
+    /dev/loop*.
+  * Use dh-autoreconf, as upstream stopped shipping automake'd tarballs
+    + B-D on debootstrap, kpartx and dump for automake to find them.
+  * Bump standards to 3.9.8; no changes needed.
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Wed, 01 Jun 2016 12:30:01 +0300
+
+ganeti-instance-debootstrap (0.15-2) unstable; urgency=medium
+
+  * Drop dependency on initscripts (Closes: #804958)
+  * Bump standards to 3.9.7; no changes needed
+  * d/control: use HTTPS for all URLs
+  * Add a lintian override for the code.google.com URL.
+    The project's page on Google Code is still functional and upstream has
+    not moved the project to another location yet.
+  * d/copyright: use HTTPS for the source URL.
+  * d/copyright: adjust debian/ copyright years
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Tue, 09 Feb 2016 10:43:42 +0200
+
+ganeti-instance-debootstrap (0.15-1) unstable; urgency=medium
+
+  * New upstream release (closes: #771411)
+    + Drop kpartx patch, merged upstream
+  * d/watch: verify releases using upstream's key
+  * Bump standards version to 3.9.6, no changes needed
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Fri, 23 Oct 2015 17:26:12 +0300
+
+ganeti-instance-debootstrap (0.14-2) unstable; urgency=medium
+
+  * Use kpartx's sync mode:
+    Add a patch (merged upstream post-0.14) to use kpartx in sync mode when
+    creating the partition device maps, solving a race where the creation
+    script would proceed before the actual devices were present.
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Fri, 23 May 2014 11:56:27 +0300
+
+ganeti-instance-debootstrap (0.14-1) unstable; urgency=medium
+
+  [ Iustin Pop ]
+  * Remove myself from uploaders
+
+  [ Apollon Oikonomopoulos ]
+  * New upstream version (see NEWS)
+    + drop debian hooks (merged upstream):
+      - clear-root-password
+      - xen-hvc0
+    + use dpkg-maintscript-helper to clean-up the dropped hooks from installed
+      systems
+  * Add myself to Uploaders
+  * debian/rules: switch to dh sequencer
+  * Bump standards to 3.9.5 and compat to 9
+    + no changes needed
+  * Canonicalize vcs-* fields
+  * Convert copyright to Format 1.0
+  * Update watch file to use downloads.ganeti.org
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Fri, 21 Feb 2014 13:13:43 +0200
+
+ganeti-instance-debootstrap (0.11-1) unstable; urgency=low
+
+  * New upstream version, with a number of small fixes and improvements;
+    also Closes: #672114
+  * Standards version 3.9.3 (no changes needed)
+  * Reorg debian/rules a bit
+
+ -- Iustin Pop <iustin@debian.org>  Wed, 09 May 2012 21:15:18 +0200
+
+ganeti-instance-debootstrap (0.9-3) unstable; urgency=low
+
+  * Fix the mountpoint check in the recently-added hooks
+
+ -- Iustin Pop <iustin@debian.org>  Wed, 15 Sep 2010 22:26:24 +0200
+
+ganeti-instance-debootstrap (0.9-2) unstable; urgency=low
+
+  * Add a hook for fixing Xen PVM console issues (Closes: #596009)
+  * Add a hook to set the root account to no password, to allow the
+    initial login to proceed
+  * Standards version 3.9.1 (replace Conflicts with Breaks)
+
+ -- Iustin Pop <iustin@debian.org>  Sun, 12 Sep 2010 19:58:52 +0200
+
+ganeti-instance-debootstrap (0.9-1) unstable; urgency=low
+
+  * New Upstream version
+  * Include the /etc hooks dir in the package
+  * Include the example hooks in the package
+  * Move the variants.list file to /etc
+  * Add a warning to NEWS for the changed hooks dir
+
+ -- Iustin Pop <iustin@debian.org>  Sun, 18 Apr 2010 13:38:10 +0200
+
+ganeti-instance-debootstrap (0.8-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Iustin Pop <iustin@debian.org>  Wed, 03 Mar 2010 01:49:42 +0100
+
+ganeti-instance-debootstrap (0.7-2) unstable; urgency=low
+
+  * Convert source format to 3.0 (quilt)
+  * Restrict watch file to digits and dots only
+  * Cherry-pick blktype support from upstream tree
+  * Add dependency on kpartx
+  * Standards version 3.8.3 (no changes needed)
+  * Remove Leonardo (l@lmello.eu.org) from Uploaders
+
+ -- Iustin Pop <iusty@k1024.org>  Sun, 06 Dec 2009 14:47:51 +0100
+
+ganeti-instance-debootstrap (0.7-1) unstable; urgency=low
+
+  * New Upstream Version
+  * Standards version 3.8.1 (no changes needed)
+  * Add a conflict with ganeti versions below 1.2.7, as multi-version OSes
+    are supported only from that version on
+
+ -- Iustin Pop <iusty@k1024.org>  Thu, 07 May 2009 08:26:20 +0200
+
+ganeti-instance-debootstrap (0.6-1) unstable; urgency=low
+
+  * New Upstream Version
+
+ -- Iustin Pop <iusty@k1024.org>  Sun, 03 May 2009 17:17:22 +0200
+
+ganeti-instance-debootstrap (0.5-1) unstable; urgency=low
+
+  * Initial release. (Closes: #466583)
+
+ -- Iustin Pop <iusty@k1024.org>  Mon, 07 Jul 2008 17:34:09 +0200

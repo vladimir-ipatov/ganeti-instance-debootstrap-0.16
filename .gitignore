@@ -1,0 +1,4 @@
+config.log
+debian/ganeti-instance-debootstrap.debhelper.log
+debian/ganeti-instance-debootstrap
+debian/files
