@@ -17,6 +17,9 @@ echo Configuring puppetmaster
 mv "$TARGET/etc/default/puppetmaster.dpkg-dist" "$TARGET/etc/default/puppetmaster"
 echo '*.'`dnsdomainname` >"$TARGET/etc/puppet/autosign.conf"
 echo 'certname = puppet' >>"$TARGET/etc/puppet/puppet.conf"
+echo 'environmentpath=/etc/puppet' >>"$TARGET/etc/puppet/puppet.conf"
+mkdir "$TARGET/etc/puppet/production"
+(cd $TARGET/etc/puppet; ln -s modules production; ln -s manifests production)
 
 DOMAIN=`dnsdomainname`
 
@@ -42,6 +45,8 @@ cat <<EOF >"$TARGET/etc/puppet/fileserver.conf"
 EOF
 
 mkdir "$TARGET/etc/puppet/files"
+mkdir "$TARGET/etc/puppet/production"
+(cd "$TARGET/etc/puppet/production"; ln -s ../modules; ln -s ../manifests)
 
 # clone git repo and make auto config for locale and timezone
 . /etc/sci/sci.conf
