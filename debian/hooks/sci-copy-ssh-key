@@ -13,6 +13,7 @@ echo Copy root ssh authorized keys to sci
 mkdir -p "$TARGET/root/.ssh"
 chmod 700 "$TARGET/root/.ssh"
 cp /root/.ssh/authorized_keys "$TARGET/root/.ssh"
+echo "PubkeyAcceptedKeyTypes=+ssh-dss" >> $TARGET/etc/ssh/sshd_config
 
 echo "Finishing hook sci-copy-ssh-keys"
 exit 0
