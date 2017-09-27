@@ -81,6 +81,7 @@ else
   # build the full parameter format from it
   INCLUDE=${EXTRA_PKGS:+"--include=$EXTRA_PKGS"}
   debootstrap \
+    ${EXTRA_ARGS} \
     --arch "$DPKG_ARCH" \
     $INCLUDE \
     "$SUITE" $TMPDIR $MIRROR

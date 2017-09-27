@@ -94,6 +94,7 @@ else
   INCLUDE=${EXTRA_PKGS:+"--include=$EXTRA_PKGS"}
   COMP=${COMPONENTS:+"--components=$COMPONENTS"}
   debootstrap \
+    ${EXTRA_ARGS} \
     --arch "$DPKG_ARCH" \
     $INCLUDE \
     $COMP \
