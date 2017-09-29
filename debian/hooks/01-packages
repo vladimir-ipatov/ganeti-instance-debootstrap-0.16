@@ -40,7 +40,7 @@ if [ "$OS_VARIANT" = "sci" ]; then
  echo N|chroot "$TARGET" apt-get -y --force-yes install approx
  echo N|chroot "$TARGET" apt-get -y --force-yes install openbsd-inetd
  echo "9999             stream  tcp     nowait  approx  /usr/sbin/approx /usr/sbin/approx" >> $TARGET/etc/inetd.conf
- chroot "$TARGET" apt-get -y --force-yes install ipcalc git
+ chroot "$TARGET" apt-get -y --force-yes install ipcalc git rng-utils
  rm "$TARGET/etc/default/openbsd-inetd"
 fi
 
