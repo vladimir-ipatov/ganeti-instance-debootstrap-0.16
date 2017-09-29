@@ -14,6 +14,11 @@ chroot "$TARGET" /usr/bin/puppet agent --enable
 echo Killing puppet agent
 chroot "$TARGET" /bin/kill -9 `cat $TARGET/run/puppet/agent.pid`
 
+test "$OS_VARIANT" = "wheezy" -o "$OS_VARIANT" = "squeeze" -o "$OS_VARIANT" = "jessie" && exit 0
+
+chroot "$TARGET" update-rc.d -f puppet remove
+chroot "$TARGET" update-rc.d -f puppet defaults
+
 echo "Finishing hook z_puppet-enable"
 exit 0
 
