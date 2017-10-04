@@ -31,7 +31,7 @@
 #INSTANCE_NAME=vg-test2
 
 IP2NET=/usr/local/sbin/gnt-ip2net
-
+echo "Starting hook $0: This is a script that configures you /etc/network/interfaces" 
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
   exit 1
@@ -126,3 +126,4 @@ EOF
   done
 
 fi
+echo "Finishing hook $0" 

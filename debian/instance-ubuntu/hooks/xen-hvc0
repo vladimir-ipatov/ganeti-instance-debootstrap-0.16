@@ -1,7 +1,7 @@
 #!/bin/sh
 
-set -e
-
+#set -e
+echo "Starting hook $0: This service maintains a getty on hvc0 from the point the system is started until it is shut down again." 
 # Make sure we're not working on the root directory
 if [ -z "$TARGET" -o "$TARGET" = "/" ]; then
     echo "Invalid target directory '$TARGET', aborting." 1>&2
@@ -29,6 +29,6 @@ respawn
 exec /sbin/getty -8 38400 hvc0
 EOF
 fi
-
+echo "Finishing hook $0" 
 exit 0
 

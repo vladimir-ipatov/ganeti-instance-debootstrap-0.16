@@ -4,10 +4,10 @@
 #
 # Do not include packages in EXTRA_PKGS because it will cause error of debootstrap.
 
-set -e
-
+#set -e
 . common.sh
 
+echo "Starting hook $0: Install packages"
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
   exit 1
@@ -28,11 +28,11 @@ echo Updating package sources
 chroot "$TARGET" apt-get update
 
 echo Installing packages
-chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server
+chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server lsb-release
 
 # execute cleanups
 cleanup
 trap - EXIT
-
+echo "Finishing hook $0" 
 exit 0
 

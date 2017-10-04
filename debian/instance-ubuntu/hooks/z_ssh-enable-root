@@ -2,8 +2,8 @@
 #
 # Enable root ssh access with password for 14.04 and 16.04 installs
 
-set -e
-
+#set -e
+echo "Starting hook $0: Enable root ssh access with password for 14.04 and 16.04 installs" 
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
   exit 1
@@ -13,5 +13,5 @@ test "$OS_VARIANT" = "precise" && exit 0
 sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' $TARGET/etc/ssh/sshd_config
 sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' $TARGET/etc/ssh/sshd_config
 
+echo "Finishing hook $0" 
 exit 0
-

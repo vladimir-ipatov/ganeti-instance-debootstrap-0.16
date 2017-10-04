@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Set up hosts and resolv.conf for LAN
-
-set -e
+echo "Starting hook $0: Set up hosts and resolv.conf for LAN" 
+#set -e
 
 test "$OS_VARIANT" = "sci" && exit 0
 
@@ -46,5 +46,5 @@ echo Setting up resolv.conf for LAN
 grep ^search /etc/resolv.conf >"$TARGET/etc/resolv.conf"
 echo "nameserver $SCI_LAN_IP" >>"$TARGET/etc/resolv.conf"
 
-
+echo "Finishing hook $0" 
 exit 0
