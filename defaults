@@ -102,6 +102,7 @@ elif [ "$OS_NAME" = "debootstrap" -o "$OS_NAME" = "debian" ]; then
     MIRROR=http://archive.debian.org/debian/
     SUITE=squeeze
     EXTRA_PKGS="linux-image-xen-amd64"
+    EXTRA_ARGS="--no-check-gpg"
   elif [ "$OS_VARIANT" = "jessie" ]; then
     MIRROR=http://ftp.debian.org/debian/
     SUITE=jessie
