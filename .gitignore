@@ -14,7 +14,7 @@ debian/files
 Makefile
 Makefile.in
 configure
-./common.sh
+/common.sh
 build-stamp
 install-stamp
 config.log
