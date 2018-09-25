@@ -30,7 +30,7 @@
 #NIC_COUNT=1
 #INSTANCE_NAME=vg-test2
 
-IP2NET=/usr/local/sbin/gnt-ip2net
+IP2NET=/usr/sbin/gnt-ip2net
 
 if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
   echo "Missing target directory"
