@@ -30,7 +30,7 @@ echo Updating package sources
 chroot "$TARGET" apt-get update
 
 echo Installing packages
-chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server lsb-release
+chroot "$TARGET" apt-get -y --force-yes install puppet openssh-client openssh-server lsb-release zsh
 
 if [ "$OS_VARIANT" = "sci" ]; then
  echo Installing packages for SCI

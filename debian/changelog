@@ -1,8 +1,16 @@
+ganeti-instance-debootstrap (0.16-2.1+sci4) unstable; urgency=medium
+
+  * set pti=off in kernel parameters
+  * add zsh to packages
+
+ -- Vladimir Ipatov <vs@ipatov.net>  Tue, 13 Mar 2018 21:24:00 +0300
+
 ganeti-instance-debootstrap (0.16-2.1+sci3) unstable; urgency=medium
 
   * fix gnt-ip2net script location
 
  -- Vladimir Ipatov <vs@ipatov.net>  Tue, 13 Mar 2018 21:24:00 +0300
+
 ganeti-instance-debootstrap (0.16-2.1+sci2) unstable; urgency=medium
 
   * add common.sh for windows and solaris
