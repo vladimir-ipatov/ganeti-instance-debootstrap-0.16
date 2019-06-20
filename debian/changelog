@@ -1,3 +1,9 @@
+ganeti-instance-debootstrap (0.16-2.1+sci5) unstable; urgency=medium
+
+  * set achive mirror for wheezy
+
+ -- Vladimir Ipatov <vs@ipatov.net>  Tue, 13 Mar 2018 21:24:00 +0300
+
 ganeti-instance-debootstrap (0.16-2.1+sci4) unstable; urgency=medium
 
   * set pti=off in kernel parameters
