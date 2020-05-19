@@ -39,10 +39,10 @@ fi
 if [ "$PARTITION_STYLE" = "none" ]; then
   filesystem_dev=$blockdev
 elif [ "$PARTITION_STYLE" = "msdos" ]; then
-  # Create one big partition, and make it bootable
-  format_disk0 $blockdev
-  filesystem_dev=$(map_disk0 $blockdev)
-  CLEANUP+=("unmap_disk0 $blockdev")
+  #format_disk0 $blockdev
+  # filesystem without partition
+  filesystem_dev=$blockdev
+  #CLEANUP+=("unmap_disk0 $blockdev")
 else
   echo "Unknown partition style $PARTITION_STYLE"
   exit 1

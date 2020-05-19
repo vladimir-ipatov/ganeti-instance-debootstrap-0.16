@@ -23,12 +23,12 @@ color cyan/blue white/blue
 
 title           Debian GNU/Linux, default kernel
 root            (hd0,0)
-kernel          /vmlinuz root=/dev/xvda1 ro pti=off
+kernel          /vmlinuz root=/dev/xvda ro pti=off
 initrd          /initrd.img
 
 title           Debian GNU/Linux, default kernel (single-user mode)
 root            (hd0,0)
-kernel          /vmlinuz root=/dev/xvda1 ro single pti=off
+kernel          /vmlinuz root=/dev/xvda ro single pti=off
 initrd          /initrd.img
 EOF
 

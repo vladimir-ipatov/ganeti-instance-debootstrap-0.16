@@ -109,6 +109,9 @@ elif [ "$OS_NAME" = "debootstrap" -o "$OS_NAME" = "debian" ]; then
   elif [ "$OS_VARIANT" = "stretch" ]; then
     MIRROR=http://ftp.debian.org/debian/
     SUITE=stretch
+  elif [ "$OS_VARIANT" = "buster" ]; then
+    MIRROR=http://ftp.debian.org/debian/
+    SUITE=buster
   elif [ "$OS_VARIANT" = "wheezy" ]; then
     MIRROR=http://archive.debian.org/debian/
     SUITE=wheezy

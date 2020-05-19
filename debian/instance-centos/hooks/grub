@@ -28,12 +28,12 @@ color cyan/blue white/blue
 
 title           CentOS, default kernel
 root            (hd0,0)
-kernel          /vmlinuz root=/dev/xvda1 ro
+kernel          /vmlinuz root=/dev/xvda ro
 initrd          /initrd.img
 
 title           CentOS, default kernel (single-user mode)
 root            (hd0,0)
-kernel          /vmlinuz root=/dev/xvda1 ro single
+kernel          /vmlinuz root=/dev/xvda ro single
 initrd          /initrd.img
 EOF
 
