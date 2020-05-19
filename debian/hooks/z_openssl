@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+echo "Starting hook z-openssl: Enable openssl weak dh for puppet"
+
+if [ -z "$TARGET" -o ! -d "$TARGET" ]; then
+  echo "Missing target directory"
+  exit 1
+fi
+
+test "$OS_VARIANT" = "buster" || exit 0
+
+echo set openssl weak dh support
+sed -i 's/CipherString = DEFAULT\@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/' $TARGET/etc/ssl/openssl.cnf
+
+echo "Finishing hook z-openssl"
+exit 0
+
